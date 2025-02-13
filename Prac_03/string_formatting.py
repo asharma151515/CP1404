@@ -1,60 +1,38 @@
-# string_formatting.py
+"""
+CP1404/CP5632 - Practical
+Various examples of using Python string formatting.
+"""
 
-MIN_LENGTH = 2
-MAX_LENGTH = 6
-IS_SPECIAL_CHARACTER_REQUIRED = False
-SPECIAL_CHARACTERS = "!@#$%^&*()_-=+`~,./'[]<>?{}|\\"
+name = "Gibson L-5 CES"
+year = 1922
+cost = 16035.9
 
+# The 'old' manual way to format text with string concatenation (don't do this):
+print("My guitar: " + name + ", first made in " + str(year))
 
-def main():
-    """Program to get and check a user's password."""
-    print("Please enter a valid password")
-    print(f"Your password must be between {MIN_LENGTH} and {MAX_LENGTH} characters, and contain:")
-    print("\t1 or more uppercase characters")
-    print("\t1 or more lowercase characters")
-    print("\t1 or more numbers")
-    if IS_SPECIAL_CHARACTER_REQUIRED:
-        print("\tand 1 or more special characters: ", SPECIAL_CHARACTERS)
+# A better way - using str.format() (don't do this unless you need to):
+print("My guitar: {}, first made in {}".format(name, year))
+print("My guitar: {0}, first made in {1}".format(name, year))
+print("My {0} was first made in {1} (that's right, {1}!)".format(name, year))
 
-    password = input("> ")
-    while not is_valid_password(password):
-        print("Invalid password!")
-        password = input("> ")
+# And with f-string formatting, introduced in Python 3.6 (do this)
+print(f"My {name} was first made in {year} (that's right, {year}!)")
 
-    print(f"Your {len(password)}-character password is valid: {password}")
+# Formatting currency (grouping with comma, 2 decimal places):
+print("My {} would cost ${:,.2f}".format(name, cost))  # str.format version
+print(f"My {name} would cost ${cost:,.2f}")  # preferred f-string version
 
+# Aligning columns by using width after the :
+# This loop uses enumerate, which is useful when you want both the index and value
+numbers = [1, 19, 123, 456, -25]
+for i, number in enumerate(numbers, 1):
+    print(f"Number {i} is {number:5}")
 
-def is_valid_password(password):
-    """Determine if the provided password is valid."""
-    # Check password length
-    if len(password) < MIN_LENGTH or len(password) > MAX_LENGTH:
-        return False
+# Use f-string formatting to produce the output:
+print(f"{year} {name} for about ${cost:,.0f}!")  # 1922 Gibson L-5 CES for about $16,036!
 
-    number_of_lower = 0
-    number_of_upper = 0
-    number_of_digit = 0
-    number_of_special = 0
-
-    for character in password:
-        if character.islower():
-            number_of_lower += 1
-        elif character.isupper():
-            number_of_upper += 1
-        elif character.isdigit():
-            number_of_digit += 1
-        elif character in SPECIAL_CHARACTERS:
-            number_of_special += 1
-
-    # Check if the counts of each type are valid
-    if number_of_lower == 0 or number_of_upper == 0 or number_of_digit == 0:
-        return False
-
-    # Check for special characters if required
-    if IS_SPECIAL_CHARACTER_REQUIRED and number_of_special == 0:
-        return False
-
-    # If we get here, the password is valid
-    return True
-
-
-main()
+# Using a for loop with the range function and f-string formatting,
+# produce the following right-aligned output:
+for exponent in range(11):
+    value = 2 ** exponent
+    print(f"2 ^ {exponent:2} is {value:4}")
